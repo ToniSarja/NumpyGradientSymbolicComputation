@@ -1,0 +1,23 @@
+import numpy as np
+
+# Load word embedding matrix (e.g., embeddings of primes/targets)
+A = np.loadtxt("word_vectors.csv", delimiter=",")
+B = np.loadtxt("morph_transition.csv", delimiter=",")  # Morphological transition matrix
+C = np.loadtxt("corpus_probs.csv", delimiter=",")  # Corpus-based probabilities
+
+# Load reaction time vectors
+r_left = np.loadtxt("reaction_times.csv", delimiter=",")
+r_right = np.loadtxt("frequency_effects.csv", delimiter=",")
+
+# Compute Kronecker products
+kron_A_rleft = np.kron(A, r_left)
+kron_A_rright = np.kron(A, r_right)
+kron_B_rleft = np.kron(B, r_left)
+kron_C_rright = np.kron(C, r_right)
+
+# Apply the gradient symbolic computation formula
+result = (0.7 * kron_A_rleft + 0.4 * kron_A_rright +
+          0.2 * kron_B_rleft - 0.9 * kron_C_rright)
+
+# Print or analyze result
+print(result)
